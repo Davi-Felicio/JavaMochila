@@ -1,162 +1,54 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.List;
 
-
-//essa main é temporária e só serve para testar as classes, posteriormente uma interface gráfica sera criada
-
-
 public class Main {
-    private static GerenciadorDeProjetos gerenciador = new GerenciadorDeProjetos();
-    private static Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
-        while (true) {
-            try {
-                System.out.println("\nSelecione uma opção:");
-                System.out.println("1. Adicionar Projeto");
-                System.out.println("2. Adicionar Recurso a um Projeto");
-                System.out.println("3. Listar Projetos");
-                System.out.println("4. Atualizar Projeto");
-                System.out.println("5. Remover Projeto");
-                System.out.println("6. Calcular Mochila para um Projeto");
-                System.out.println("0. Sair");
-                System.out.print("Escolha: ");
-                int escolha = scanner.nextInt();
-                scanner.nextLine();
+        GerenciadorDeProjetos gerenciador = new GerenciadorDeProjetos();
 
-                switch (escolha) {
-                    case 1 -> adicionarProjeto();
-                    case 2 -> adicionarRecurso();
-                    case 3 -> listarProjetos();
-                    case 4 -> atualizarProjeto();
-                    case 5 -> removerProjeto();
-                    case 6 -> calcularMochila();
-                    case 0 -> System.exit(0);
-                    default -> System.out.println("Opção inválida.");
-                }
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-                scanner.nextLine(); // Limpa o buffer do scanner
+        // Criação do Projeto 1 com orçamento de 100.0
+        Projeto projeto1 = new Projeto(1, "Projeto Alpha", 100.0);
+        gerenciador.adicionarProjeto(projeto1);
+        gerenciador.adicionarRecursoAoProjeto(1, new Recurso(1, "Recurso A1", 30.0, 40.0));
+        gerenciador.adicionarRecursoAoProjeto(1, new Recurso(2, "Recurso A2", 20.0, 30.0));
+        gerenciador.adicionarRecursoAoProjeto(1, new Recurso(3, "Recurso A3", 50.0, 60.0));
+        gerenciador.adicionarRecursoAoProjeto(1, new Recurso(4, "Recurso A4", 40.0, 70.0));
+        gerenciador.adicionarRecursoAoProjeto(1, new Recurso(5, "Recurso A5", 10.0, 15.0));
+
+        // Criação do Projeto 2 com orçamento de 200.0
+        Projeto projeto2 = new Projeto(2, "Projeto Beta", 200.0);
+        gerenciador.adicionarProjeto(projeto2);
+        gerenciador.adicionarRecursoAoProjeto(2, new Recurso(6, "Recurso B1", 60.0, 90.0));
+        gerenciador.adicionarRecursoAoProjeto(2, new Recurso(7, "Recurso B2", 80.0, 100.0));
+        gerenciador.adicionarRecursoAoProjeto(2, new Recurso(8, "Recurso B3", 30.0, 45.0));
+        gerenciador.adicionarRecursoAoProjeto(2, new Recurso(9, "Recurso B4", 50.0, 60.0));
+        gerenciador.adicionarRecursoAoProjeto(2, new Recurso(10, "Recurso B5", 40.0, 55.0));
+
+        // Criação do Projeto 3 com orçamento de 150.0
+        Projeto projeto3 = new Projeto(3, "Projeto Gamma", 150.0);
+        gerenciador.adicionarProjeto(projeto3);
+        gerenciador.adicionarRecursoAoProjeto(3, new Recurso(11, "Recurso C1", 70.0, 80.0));
+        gerenciador.adicionarRecursoAoProjeto(3, new Recurso(12, "Recurso C2", 20.0, 25.0));
+        gerenciador.adicionarRecursoAoProjeto(3, new Recurso(13, "Recurso C3", 40.0, 50.0));
+        gerenciador.adicionarRecursoAoProjeto(3, new Recurso(14, "Recurso C4", 30.0, 35.0));
+        gerenciador.adicionarRecursoAoProjeto(3, new Recurso(15, "Recurso C5", 90.0, 100.0));
+
+        // Testando o cálculo da mochila para cada projeto
+        calcularMochilaParaProjeto(gerenciador, 1);
+        calcularMochilaParaProjeto(gerenciador, 2);
+        calcularMochilaParaProjeto(gerenciador, 3);
+    }
+
+    private static void calcularMochilaParaProjeto(GerenciadorDeProjetos gerenciador, int projetoId) {
+        Projeto projeto = gerenciador.buscarProjetoPorId(projetoId);
+        if (projeto != null) {
+            List<Recurso> recursosSelecionados = resolverMochila(projeto.getRecursos(), projeto.getOrcamento());
+            System.out.println("\nRecursos selecionados para o " + projeto.getNome() + " (Orçamento: " + projeto.getOrcamento() + "):");
+            for (Recurso recurso : recursosSelecionados) {
+                System.out.println("Recurso ID: " + recurso.getId() + ", Nome: " + recurso.getNome() +
+                                   ", Valor Agregado: " + recurso.getValorAgregado() + ", Custo: " + recurso.getCusto());
             }
-        }
-    }
-
-    private static void adicionarProjeto() {
-        try {
-            System.out.print("ID do Projeto: ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
-            System.out.print("Nome do Projeto: ");
-            String nome = scanner.nextLine();
-            System.out.print("Orçamento do Projeto: ");
-            double orcamento = scanner.nextDouble();
-
-            Projeto projeto = new Projeto(id, nome, orcamento);
-            gerenciador.adicionarProjeto(projeto);
-            System.out.println("Projeto adicionado com sucesso.");
-        } catch (Exception e) {
-            System.out.println("Erro ao adicionar projeto: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
-        }
-    }
-
-    private static void adicionarRecurso() {
-        try {
-            System.out.print("ID do Projeto: ");
-            int projetoId = scanner.nextInt();
-            System.out.print("ID do Recurso: ");
-            int recursoId = scanner.nextInt();
-            scanner.nextLine();
-            System.out.print("Nome do Recurso: ");
-            String nomeRecurso = scanner.nextLine();
-            System.out.print("Custo do Recurso: ");
-            double custo = scanner.nextDouble();
-            System.out.print("Valor Agregado do Recurso: ");
-            double valorAgregado = scanner.nextDouble();
-
-            Recurso recurso = new Recurso(recursoId, nomeRecurso, custo, valorAgregado);
-            gerenciador.adicionarRecursoAoProjeto(projetoId, recurso);
-            System.out.println("Recurso adicionado ao projeto.");
-        } catch (Exception e) {
-            System.out.println("Erro ao adicionar recurso: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
-        }
-    }
-
-    private static void listarProjetos() {
-        try {
-            List<Projeto> projetos = gerenciador.listarProjetos();
-            for (Projeto projeto : projetos) {
-                System.out.println("Projeto ID: " + projeto.getId() + ", Nome: " + projeto.getNome() + ", Orçamento: " + projeto.getOrcamento());
-                for (Recurso recurso : projeto.getRecursos()) {
-                    System.out.println("  Recurso ID: " + recurso.getId() + ", Nome: " + recurso.getNome() + ", Custo: " + recurso.getCusto() + ", Valor Agregado: " + recurso.getValorAgregado());
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao listar projetos: " + e.getMessage());
-        }
-    }
-
-    private static void atualizarProjeto() {
-        try {
-            System.out.print("ID do Projeto a atualizar: ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
-
-            Projeto projeto = gerenciador.buscarProjetoPorId(id);
-            if (projeto != null) {
-                System.out.print("Novo Nome do Projeto: ");
-                String novoNome = scanner.nextLine();
-                System.out.print("Novo Orçamento do Projeto: ");
-                double novoOrcamento = scanner.nextDouble();
-
-                projeto.setNome(novoNome);
-                projeto.setOrcamento(novoOrcamento);
-                System.out.println("Projeto atualizado com sucesso.");
-            } else {
-                System.out.println("Projeto não encontrado.");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao atualizar projeto: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
-        }
-    }
-
-    private static void removerProjeto() {
-        try {
-            System.out.print("ID do Projeto a remover: ");
-            int id = scanner.nextInt();
-            Projeto projeto = gerenciador.buscarProjetoPorId(id);
-            if (projeto != null) {
-                gerenciador.removerProjeto(id, projeto);//FALTA IMPLEMENTAR ESSA PARTE NA CLASSE AAAAAAAAAAAAAAA
-                System.out.println("Projeto removido com sucesso.");
-            } else {
-                System.out.println("Projeto não encontrado.");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao remover projeto: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
-        }
-    }
-
-    private static void calcularMochila() {
-        try {
-            System.out.print("ID do Projeto para calcular a mochila: ");
-            int id = scanner.nextInt();
-            Projeto projeto = gerenciador.buscarProjetoPorId(id);
-            if (projeto != null) {
-                List<Recurso> recursosSelecionados = resolverMochila(projeto.getRecursos(), projeto.getOrcamento());
-                System.out.println("Recursos selecionados para maximizar o valor agregado:");
-                for (Recurso recurso : recursosSelecionados) {
-                    System.out.println("Recurso ID: " + recurso.getId() + ", Nome: " + recurso.getNome() + ", Valor Agregado: " + recurso.getValorAgregado()+ ",  Custo:  "+ recurso.getCusto());
-                }
-            } else {
-                System.out.println("Projeto não encontrado.");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao calcular a mochila: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
+        } else {
+            System.out.println("Projeto com ID " + projetoId + " não encontrado.");
         }
     }
 
