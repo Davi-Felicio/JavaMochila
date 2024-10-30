@@ -3,10 +3,7 @@ import java.util.Scanner;
 import java.util.List;
 
 
-
 //essa main é temporária e só serve para testar as classes, posteriormente uma interface gráfica sera criada
-
-
 
 
 public class Main {
