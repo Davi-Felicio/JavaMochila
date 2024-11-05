@@ -32,7 +32,7 @@ public class GerenciadorDeProjetos implements ProjetoRecursoCRUD {
         }
     }
 
-    public void removerProjeto(int id){
+    public void removerProjeto(int id, Projeto projeto){
         System.out.println("falta implementar kkkkkkk");
     }
 }
