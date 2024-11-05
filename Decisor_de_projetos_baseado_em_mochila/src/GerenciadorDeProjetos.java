@@ -32,12 +32,28 @@ public class GerenciadorDeProjetos implements ProjetoRecursoCRUD {
         }
     }
 
-    public void removerProjeto(int id, Projeto projeto){
-        System.out.println("falta implementar kkkkkkk");
+
+    @Override
+    public void removerProjeto(int id) {
+        Projeto projeto = buscarProjetoPorId(id);
+        if (projeto != null) {
+            projetos.remove(projeto);
+            System.out.println("Projeto removido com sucesso.");
+        } else {
+            System.out.println("Projeto não encontrado.");
+        }
     }
 
-    public void AtualizarProjeto(int id, Projeto projeto){
-        System.out.println("falta implementar kkkkkkk");
 
+    @Override
+    public void atualizarProjeto(int id, Projeto projetoAtualizado) {
+        Projeto projetoExistente = buscarProjetoPorId(id);
+        if (projetoExistente != null) {
+            projetoExistente.setNome(projetoAtualizado.getNome());
+            projetoExistente.setOrcamento(projetoAtualizado.getOrcamento());
+            System.out.println("Projeto atualizado com sucesso.");
+        } else {
+            System.out.println("Projeto não encontrado.");
+        }
     }
 }

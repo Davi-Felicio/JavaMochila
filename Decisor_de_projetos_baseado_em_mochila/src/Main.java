@@ -42,20 +42,18 @@ public class Main {
 
     private static void adicionarProjeto() {
         try {
-            System.out.print("ID do Projeto: ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
+
             System.out.print("Nome do Projeto: ");
             String nome = scanner.nextLine();
             System.out.print("Orçamento do Projeto: ");
             double orcamento = scanner.nextDouble();
 
-            Projeto projeto = new Projeto(id, nome, orcamento);
+            Projeto projeto = new Projeto(nome, orcamento);
             gerenciador.adicionarProjeto(projeto);
             System.out.println("Projeto adicionado com sucesso.");
         } catch (Exception e) {
             System.out.println("Erro ao adicionar projeto: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
+            scanner.nextLine();
         }
     }
 
@@ -63,8 +61,7 @@ public class Main {
         try {
             System.out.print("ID do Projeto: ");
             int projetoId = scanner.nextInt();
-            System.out.print("ID do Recurso: ");
-            int recursoId = scanner.nextInt();
+
             scanner.nextLine();
             System.out.print("Nome do Recurso: ");
             String nomeRecurso = scanner.nextLine();
@@ -73,7 +70,7 @@ public class Main {
             System.out.print("Valor Agregado do Recurso: ");
             double valorAgregado = scanner.nextDouble();
 
-            Recurso recurso = new Recurso(recursoId, nomeRecurso, custo, valorAgregado);
+            Recurso recurso = new Recurso(nomeRecurso, custo, valorAgregado);
             gerenciador.adicionarRecursoAoProjeto(projetoId, recurso);
             System.out.println("Recurso adicionado ao projeto.");
         } catch (Exception e) {
@@ -82,7 +79,7 @@ public class Main {
         }
     }
 
-    private static void listarProjetos() {
+    private static void listarProjetos() {              //pra fazer com interfae esse print vai dar pau
         try {
             List<Projeto> projetos = gerenciador.listarProjetos();
             for (Projeto projeto : projetos) {
@@ -127,8 +124,8 @@ public class Main {
             int id = scanner.nextInt();
             Projeto projeto = gerenciador.buscarProjetoPorId(id);
             if (projeto != null) {
-                gerenciador.removerProjeto(id, projeto);
-                System.out.println("Projeto removido com sucesso.");
+                gerenciador.removerProjeto(id);
+
             } else {
                 System.out.println("Projeto não encontrado.");
             }
@@ -154,7 +151,7 @@ public class Main {
             }
         } catch (Exception e) {
             System.out.println("Erro ao calcular a mochila: " + e.getMessage());
-            scanner.nextLine(); // Limpa o buffer do scanner
+            scanner.nextLine();
         }
     }
 }

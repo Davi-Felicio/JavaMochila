@@ -1,11 +1,12 @@
 public class Recurso {
+    private static int contadorDeId = 1;
     private int id;
     private String nome;
     private double custo;
     private double valorAgregado;
 
-    public Recurso(int id, String nome, double custo, double valorAgregado) {
-        this.id = id;
+    public Recurso(String nome, double custo, double valorAgregado) {
+        this.id = contadorDeId++; //
         this.nome = nome;
         this.custo = custo;
         this.valorAgregado = valorAgregado;
