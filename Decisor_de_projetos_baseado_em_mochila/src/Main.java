@@ -2,13 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
-
-//essa main é temporária e só serve para testar as classes, posteriormente uma interface gráfica sera criada
-
-
+// Esta classe Main é temporária e será substituída por uma interface gráfica no futuro.
 public class Main {
     private static GerenciadorDeProjetos gerenciador = new GerenciadorDeProjetos();
     private static Scanner scanner = new Scanner(System.in);
+    private static MochilaAlgoritmoProgDin mochilaAlgoritmo = new MochilaAlgoritmoProgDin();
 
     public static void main(String[] args) {
         while (true) {
@@ -129,7 +127,7 @@ public class Main {
             int id = scanner.nextInt();
             Projeto projeto = gerenciador.buscarProjetoPorId(id);
             if (projeto != null) {
-                gerenciador.removerProjeto(id, projeto);//FALTA IMPLEMENTAR ESSA PARTE NA CLASSE AAAAAAAAAAAAAAA
+                gerenciador.removerProjeto(id, projeto);
                 System.out.println("Projeto removido com sucesso.");
             } else {
                 System.out.println("Projeto não encontrado.");
@@ -146,10 +144,10 @@ public class Main {
             int id = scanner.nextInt();
             Projeto projeto = gerenciador.buscarProjetoPorId(id);
             if (projeto != null) {
-                List<Recurso> recursosSelecionados = resolverMochila(projeto.getRecursos(), projeto.getOrcamento());
+                List<Recurso> recursosSelecionados = mochilaAlgoritmo.otimizarRecursos(projeto.getRecursos(), projeto.getOrcamento());
                 System.out.println("Recursos selecionados para maximizar o valor agregado:");
                 for (Recurso recurso : recursosSelecionados) {
-                    System.out.println("Recurso ID: " + recurso.getId() + ", Nome: " + recurso.getNome() + ", Valor Agregado: " + recurso.getValorAgregado()+ ",  Custo:  "+ recurso.getCusto());
+                    System.out.println("Recurso ID: " + recurso.getId() + ", Nome: " + recurso.getNome() + ", Valor Agregado: " + recurso.getValorAgregado() + ", Custo: " + recurso.getCusto());
                 }
             } else {
                 System.out.println("Projeto não encontrado.");
@@ -159,6 +157,4 @@ public class Main {
             scanner.nextLine(); // Limpa o buffer do scanner
         }
     }
-
-
 }
