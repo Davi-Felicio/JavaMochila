@@ -35,4 +35,9 @@ public class GerenciadorDeProjetos implements ProjetoRecursoCRUD {
     public void removerProjeto(int id, Projeto projeto){
         System.out.println("falta implementar kkkkkkk");
     }
+
+    public void AtualizarProjeto(int id, Projeto projeto){
+        System.out.println("falta implementar kkkkkkk");
+
+    }
 }

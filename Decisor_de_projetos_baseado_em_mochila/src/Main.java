@@ -16,7 +16,7 @@ public class Main {
                 System.out.println("2. Adicionar Recurso a um Projeto");
                 System.out.println("3. Listar Projetos");
                 System.out.println("4. Atualizar Projeto");
-                System.out.println("5. Remover Projeto");
+                System.out.println("5. Remover Projeto (falta implementar)");
                 System.out.println("6. Calcular Mochila para um Projeto");
                 System.out.println("0. Sair");
                 System.out.print("Escolha: ");
