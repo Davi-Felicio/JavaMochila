@@ -6,7 +6,7 @@ import java.util.List;
 public class Main {
     private static GerenciadorDeProjetos gerenciador = new GerenciadorDeProjetos();
     private static Scanner scanner = new Scanner(System.in);
-    private static MochilaAlgoritmoProgDin mochilaAlgoritmo = new MochilaAlgoritmoProgDin();
+    private static MochilaAlgoritmoEstrela mochilaAlgoritmo = new MochilaAlgoritmoEstrela();
 
     public static void main(String[] args) {
         while (true) {
