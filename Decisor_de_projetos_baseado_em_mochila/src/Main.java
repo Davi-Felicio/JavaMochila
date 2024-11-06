@@ -8,7 +8,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static MochilaAlgoritmoEstrela mochilaAlgoritmo = new MochilaAlgoritmoEstrela();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {1
         while (true) {
             try {
                 System.out.println("\nSelecione uma opção:");
