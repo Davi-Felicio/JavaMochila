@@ -33,4 +33,11 @@ public class Projeto {
     public void setOrcamento(double orcamento) {
         this.orcamento = orcamento;
     }
+
+    @Override
+    public String toString() {
+        return  nome;
+    }
 }
+
+
