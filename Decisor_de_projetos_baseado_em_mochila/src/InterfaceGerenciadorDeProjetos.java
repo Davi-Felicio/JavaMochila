@@ -50,8 +50,17 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
             }
         });
 
+        JButton editarProjetoButton = new JButton("Editar Projeto");  // Botão Editar Projeto
+        editarProjetoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editarProjeto(); // Agora o botão de editar está funcionando corretamente
+            }
+        });
+
         painelBotoesProjetos.add(adicionarProjetoButton);
         painelBotoesProjetos.add(removerProjetoButton);
+        painelBotoesProjetos.add(editarProjetoButton); // Aqui o botão de editar é adicionado
 
         painelProjetos.add(painelBotoesProjetos, BorderLayout.SOUTH);
 
@@ -138,6 +147,21 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
         }
     }
 
+    private void editarProjeto() {
+        Projeto projetoSelecionado = listaProjetos.getSelectedValue();
+        if (projetoSelecionado != null) {
+            String novoNome = JOptionPane.showInputDialog("Novo nome do projeto:", projetoSelecionado.getNome());
+            double novoOrcamento = Double.parseDouble(JOptionPane.showInputDialog("Novo orçamento do projeto:", projetoSelecionado.getOrcamento()));
+
+            projetoSelecionado.editarProjeto(novoNome, novoOrcamento);
+
+            // Atualiza o modelo para refletir as alterações na lista
+            modeloProjetos.setElementAt(projetoSelecionado, listaProjetos.getSelectedIndex());
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um projeto para editar.");
+        }
+    }
+
     private void adicionarRecurso() {
         Projeto projetoSelecionado = listaProjetos.getSelectedValue();
         if (projetoSelecionado != null) {
@@ -190,24 +214,11 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
             MochilaAlgoritmoEstrela algoritmo = new MochilaAlgoritmoEstrela();
             List<Recurso> recursosOtimizados = algoritmo.otimizarRecursos(recursos, orcamento);
 
-            // Exibindo os resultados
-            StringBuilder resultado = new StringBuilder();
-            resultado.append("Orçamento do Projeto: ").append(orcamento).append("\n");
-            resultado.append("Recursos Otimizados (Total de " + recursosOtimizados.size() + "):\n");
-
-            double custoTotal = 0;
-            double valorTotal = 0;
-
+            // Exibe os recursos otimizados
+            StringBuilder resultado = new StringBuilder("Recursos Otimizados para o Projeto: " + projetoSelecionado.getNome() + "\n");
             for (Recurso recurso : recursosOtimizados) {
-                resultado.append("Recurso: ").append(recurso.getNome()).append("\n")
-                        .append("  Custo: ").append(recurso.getCusto()).append("\n")
-                        .append("  Valor Agregado: ").append(recurso.getValorAgregado()).append("\n");
-                custoTotal += recurso.getCusto();
-                valorTotal += recurso.getValorAgregado();
+                resultado.append("Recurso: " + recurso.getNome() + ", Custo: " + recurso.getCusto() + ", Valor Agregado: " + recurso.getValorAgregado() + "\n");
             }
-
-            resultado.append("Custo Total: ").append(custoTotal).append("\n");
-            resultado.append("Valor Total: ").append(valorTotal).append("\n");
 
             JOptionPane.showMessageDialog(this, resultado.toString());
         } else {
