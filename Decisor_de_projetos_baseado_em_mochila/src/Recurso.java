@@ -29,7 +29,6 @@ public class Recurso {
         return valorAgregado;
     }
 
-
       public void editarRecurso(String novoNome, double novoCusto, double novoValorAgregado) {
         this.nome = novoNome;
         this.custo = novoCusto;
