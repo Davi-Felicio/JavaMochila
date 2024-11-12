@@ -205,12 +205,13 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
     }
 
     public static void main(String[] args) {
-        //ConexaoBanco banco = new ConexaoBanco();
-        //try {
-        //    banco.conectar();
-        //} catch (SQLException e) {
-        //  throw new RuntimeException(e);
-        //
+        ConexaoBanco banco = new ConexaoBanco();
+        try {
+            banco.conectar();
+        }
+         catch (SQLException e) {
+          throw new RuntimeException(e);}
+
 
         SwingUtilities.invokeLater(() -> {
             InterfaceGerenciadorDeProjetos frame = new InterfaceGerenciadorDeProjetos();
