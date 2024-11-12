@@ -1,18 +1,23 @@
+import java.sql.*;
+
 public class Recurso {
-    private static int contadorId = 1; // Contador estático para gerar IDs únicos
+
     private int id;
     private String nome;
     private double custo;
     private double valorAgregado;
 
     public Recurso(String nome, double custo, double valorAgregado) {
-        this.id = contadorId++; // Atribui o ID e incrementa o contador
+
         this.nome = nome;
         this.custo = custo;
         this.valorAgregado = valorAgregado;
     }
 
-    // Getters e setters
+    // Método para salvar o recurso no banco de dados
+
+
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -29,12 +34,26 @@ public class Recurso {
         return valorAgregado;
     }
 
-      public void editarRecurso(String novoNome, double novoCusto, double novoValorAgregado) {
+    @Override
+    public String toString() {
+        return nome;
+    }
+      // Método para editar o recurso
+    public void editarRecurso(String novoNome, double novoCusto, double novoValor) {
         this.nome = novoNome;
         this.custo = novoCusto;
-        this.valorAgregado = novoValorAgregado;
+        this.valorAgregado = novoValor;
     }
 
+    public Recurso(int id, String nome, double custo, double valorAgregado) {
+        this.id = id;
+        this.nome = nome;
+        this.custo = custo;
+        this.valorAgregado = valorAgregado;
+    }
+
+    public Recurso() {
+    }
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -48,9 +67,7 @@ public class Recurso {
         this.valorAgregado = valorAgregado;
     }
 
-    // Sobrescrever toString para facilitar a exibição
-    @Override
-    public String toString() {
-        return nome;  // Exibir nome ao invés de todo o objeto
+    public void setId(int id) {
+        this.id = id;
     }
 }
