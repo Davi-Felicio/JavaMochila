@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 
 public class InterfaceGerenciadorDeProjetos extends JFrame {
@@ -204,6 +205,13 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
     }
 
     public static void main(String[] args) {
+        //ConexaoBanco banco = new ConexaoBanco();
+        //try {
+        //    banco.conectar();
+        //} catch (SQLException e) {
+        //  throw new RuntimeException(e);
+        //
+
         SwingUtilities.invokeLater(() -> {
             InterfaceGerenciadorDeProjetos frame = new InterfaceGerenciadorDeProjetos();
             frame.setVisible(true);
