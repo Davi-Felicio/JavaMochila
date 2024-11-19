@@ -9,7 +9,7 @@ public class ConexaoBanco {
     public static Connection conectar() {
         if (conexao == null) {
             try {
-                conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/gerenciadorprojetos", "root", "");
+                conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/gerenciadorprojetos", "root", "root");
                 System.out.println("Conexão estabelecida com sucesso.");
             } catch (SQLException e) {
                 throw new RuntimeException("Erro ao conectar com o banco de dados.", e);
