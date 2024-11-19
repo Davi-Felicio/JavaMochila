@@ -1,0 +1,69 @@
+@startuml
+
+class Main {
+    + main(String[] args): void
+}
+
+class Projeto {
+    - static int contadorId
+    - int id
+    - String nome
+    - double orcamento
+    - List<Recurso> recursos
+    + Projeto(String nome, double orcamento)
+    + setNome(String nome): void
+    + setOrcamento(double orcamento): void
+    + adicionarRecurso(Recurso recurso): void
+    + removerRecurso(int recursoId): void
+    + getId(): int
+    + getNome(): String
+    + getOrcamento(): double
+    + getRecursos(): List<Recurso>
+    + editarProjeto(String novoNome, double novoOrcamento): void
+    + buscarRecursoPorId(int recursoId): Recurso
+    + toString(): String
+}
+
+class Recurso {
+    - static int contadorId
+    - int id
+    - String nome
+    - double custo
+    - double valorAgregado
+    + Recurso(String nome, double custo, double valorAgregado)
+    + getId(): int
+    + getNome(): String
+    + getCusto(): double
+    + getValorAgregado(): double
+    + editarRecurso(String novoNome, double novoCusto, double novoValorAgregado): void
+    + setNome(String nome): void
+    + setCusto(double custo): void
+    + setValorAgregado(double valorAgregado): void
+    + toString(): String
+}
+
+class MochilaAlgoritmoEstrela {
+    + MochilaAlgoritmoEstrela()
+    + otimizarRecursos(List<Recurso> recursos, double limiteCusto): List<Recurso>
+    - resolverAEstrela(List<Recurso> recursos, double limiteCusto): List<Recurso>
+    - calcularValorMaximoEstimado(List<Recurso> itensAtuais, List<Recurso> recursos): double
+}
+
+class MochilaAlgoritmoEstrela$Estado {
+    - List<Recurso> itens
+    - double custoAcumulado
+    - double valorAcumulado
+    - double valorEstimado
+    + MochilaAlgoritmoEstrela$Estado(List<Recurso> itens, double custo, double valor, double estimado)
+    + getItens(): List<Recurso>
+    + getCustoAcumulado(): double
+    + getValorAcumulado(): double
+    + getValorEstimado(): double
+}
+
+Main --> Projeto
+Projeto "1" --> "*" Recurso
+MochilaAlgoritmoEstrela --> Recurso
+MochilaAlgoritmoEstrela "1" *--> "*" MochilaAlgoritmoEstrela$Estado
+
+@enduml
