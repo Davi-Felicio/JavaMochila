@@ -35,7 +35,7 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
         });
 
         setTitle("Gerenciador de Projetos");
-        setSize(800, 500);
+        setSize(1000, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -91,6 +91,21 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
 
         // Listener para carregar recursos do projeto selecionado
         listaProjetos.addListSelectionListener(e -> carregarRecursosDoProjeto(listaProjetos.getSelectedValue()));
+
+        // Carregar projetos ao iniciar
+        carregarProjetos();
+    }
+
+    private void carregarProjetos() {
+        try {
+            // Carrega os projetos do banco de dados
+            List<Projeto> projetos = gerenciador.listarProjetos();
+            for (Projeto projeto : projetos) {
+                modeloProjetos.addElement(projeto);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar projetos: " + e.getMessage());
+        }
     }
 
     private void adicionarProjeto() {
@@ -98,17 +113,26 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
         if (nomeProjeto != null && !nomeProjeto.trim().isEmpty()) {
             double orcamento = Double.parseDouble(JOptionPane.showInputDialog("Digite o orçamento do projeto:"));
             Projeto novoProjeto = new Projeto(nomeProjeto, orcamento);
-            gerenciador.adicionarProjeto(novoProjeto);
-            modeloProjetos.addElement(novoProjeto);
+            try {
+                gerenciador.adicionarProjeto(novoProjeto); // Adiciona o projeto no banco
+                modeloProjetos.addElement(novoProjeto);
+                System.out.println("id do projeto adicionado:"+ novoProjeto.getId());
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao adicionar o projeto: " + e.getMessage());
+            }
         }
     }
 
     private void removerProjeto() {
         Projeto projetoSelecionado = listaProjetos.getSelectedValue();
         if (projetoSelecionado != null) {
-            gerenciador.removerProjeto(projetoSelecionado.getId());
-            modeloProjetos.removeElement(projetoSelecionado);
-            carregarRecursosDoProjeto(null); // Limpa a lista de recursos ao remover o projeto
+            try {
+                gerenciador.removerProjeto(projetoSelecionado.getId()); // Remove o projeto no banco
+                modeloProjetos.removeElement(projetoSelecionado);
+                carregarRecursosDoProjeto(null); // Limpa a lista de recursos
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover o projeto: " + e.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para remover.");
         }
@@ -120,25 +144,36 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
             String novoNome = JOptionPane.showInputDialog("Novo nome do projeto:", projetoSelecionado.getNome());
             double novoOrcamento = Double.parseDouble(JOptionPane.showInputDialog("Novo orçamento do projeto:", projetoSelecionado.getOrcamento()));
             projetoSelecionado.editarProjeto(novoNome, novoOrcamento);
-            modeloProjetos.setElementAt(projetoSelecionado, listaProjetos.getSelectedIndex());
+            try {
+                gerenciador.editarProjeto(projetoSelecionado); // Atualiza o projeto no banco
+                modeloProjetos.setElementAt(projetoSelecionado, listaProjetos.getSelectedIndex());
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao editar o projeto: " + e.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para editar.");
         }
     }
 
     private void adicionarRecurso() {
-        Projeto projetoSelecionado = listaProjetos.getSelectedValue();
-        if (projetoSelecionado != null) {
-            String nomeRecurso = JOptionPane.showInputDialog("Digite o nome do recurso:");
-            double custo = Double.parseDouble(JOptionPane.showInputDialog("Digite o custo do recurso:"));
-            double valorAgregado = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor agregado do recurso:"));
-            Recurso novoRecurso = new Recurso(nomeRecurso, custo, valorAgregado);
-            projetoSelecionado.adicionarRecurso(novoRecurso);
-            modeloRecursos.addElement(novoRecurso);
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um projeto para adicionar recursos.");
+    Projeto projetoSelecionado = listaProjetos.getSelectedValue();
+    if (projetoSelecionado != null) {
+        String nomeRecurso = JOptionPane.showInputDialog("Digite o nome do recurso:");
+        double custo = Double.parseDouble(JOptionPane.showInputDialog("Digite o custo do recurso:"));
+        double valorAgregado = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor agregado do recurso:"));
+        Recurso novoRecurso = new Recurso(nomeRecurso, custo, valorAgregado);
+        projetoSelecionado.adicionarRecurso(novoRecurso);
+        try {
+            gerenciador.adicionarRecurso(novoRecurso, projetoSelecionado.getId()); // Salva o recurso no banco (ID será gerado automaticamente)
+            modeloRecursos.addElement(novoRecurso); // Atualiza a interface
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao adicionar recurso: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecione um projeto para adicionar recursos.");
     }
+}
+
 
     private void editarRecurso() {
         Recurso recursoSelecionado = listaRecursos.getSelectedValue();
@@ -147,22 +182,35 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
             double novoCusto = Double.parseDouble(JOptionPane.showInputDialog("Novo custo do recurso:", recursoSelecionado.getCusto()));
             double novoValor = Double.parseDouble(JOptionPane.showInputDialog("Novo valor agregado do recurso:", recursoSelecionado.getValorAgregado()));
             recursoSelecionado.editarRecurso(novoNome, novoCusto, novoValor);
-            modeloRecursos.setElementAt(recursoSelecionado, listaRecursos.getSelectedIndex());
+            try {
+                gerenciador.editarRecurso(recursoSelecionado); // Atualiza o recurso no banco
+                modeloRecursos.setElementAt(recursoSelecionado, listaRecursos.getSelectedIndex());
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao editar recurso: " + e.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um recurso para editar.");
         }
     }
 
     private void removerRecurso() {
-        Recurso recursoSelecionado = listaRecursos.getSelectedValue();
-        Projeto projetoSelecionado = listaProjetos.getSelectedValue();
-        if (projetoSelecionado != null && recursoSelecionado != null) {
-            projetoSelecionado.removerRecurso(recursoSelecionado.getId());
-            modeloRecursos.removeElement(recursoSelecionado);
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um recurso para remover.");
+    Recurso recursoSelecionado = listaRecursos.getSelectedValue();
+    Projeto projetoSelecionado = listaProjetos.getSelectedValue();
+    if (projetoSelecionado != null && recursoSelecionado != null) {
+        // Remover o recurso do banco de dados
+        try {
+            gerenciador.removerRecurso(recursoSelecionado.getId()); // Remover pelo ID do recurso no banco de dados
+            projetoSelecionado.removerRecurso(recursoSelecionado.getId()); // Remover localmente do projeto
+            modeloRecursos.removeElement(recursoSelecionado); // Atualiza a interface
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao remover recurso do banco de dados: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecione um recurso para remover.");
     }
+}
+
+
 
     private void calcularMochila() {
         Projeto projetoSelecionado = listaProjetos.getSelectedValue();
@@ -185,14 +233,22 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
         }
     }
 
-    private void carregarRecursosDoProjeto(Projeto projeto) {
-        modeloRecursos.clear();
-        if (projeto != null) {
-            for (Recurso recurso : projeto.getRecursos()) {
-                modeloRecursos.addElement(recurso);
-            }
+private void carregarRecursosDoProjeto(Projeto projeto) {
+    // Limpa os recursos anteriores
+    modeloRecursos.clear();
+
+    // Verifica se o projeto é válido
+    if (projeto != null) {
+        // Carrega os recursos do banco de dados
+        projeto.carregarRecursos();
+
+        // Atualiza o modelo com os recursos carregados
+        for (Recurso recurso : projeto.getRecursos()) {
+            modeloRecursos.addElement(recurso);
         }
     }
+}
+
 
     private Projeto getProjetoDoRecurso(Recurso recurso) {
         for (int i = 0; i < modeloProjetos.size(); i++) {
@@ -205,12 +261,8 @@ public class InterfaceGerenciadorDeProjetos extends JFrame {
     }
 
     public static void main(String[] args) {
-        //ConexaoBanco banco = new ConexaoBanco();
-        //try {
-        //    banco.conectar();
-        //} catch (SQLException e) {
-        //  throw new RuntimeException(e);
-        //
+        ConexaoBanco banco = new ConexaoBanco();
+        banco.conectar();
 
         SwingUtilities.invokeLater(() -> {
             InterfaceGerenciadorDeProjetos frame = new InterfaceGerenciadorDeProjetos();
