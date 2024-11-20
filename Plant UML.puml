@@ -1,69 +1,91 @@
 @startuml
 
-class Main {
-    + main(String[] args): void
+class InterfaceGerenciadorDeProjetos {
+    - JList<Projeto> listaProjetos
+    - DefaultListModel<Projeto> modeloProjetos
+    - JList<Recurso> listaRecursos
+    - DefaultListModel<Recurso> modeloRecursos
+    - GerenciadorDeProjetos gerenciador
+    + InterfaceGerenciadorDeProjetos()
+    + void carregarProjetos()
+    + void adicionarProjeto()
+    + void removerProjeto()
+    + void editarProjeto()
+    + void adicionarRecurso()
+    + void editarRecurso()
+    + void removerRecurso()
+    + void calcularMochila()
+    + void carregarRecursosDoProjeto(Projeto projeto)
+}
+
+class MochilaAlgoritmoEstrela {
+    + List<Recurso> otimizarRecursos(List<Recurso> recursos, double limiteCusto)
+    - List<Recurso> resolverAEstrela(List<Recurso> recursos, double limiteCusto)
+    - double calcularValorMaximoEstimado(List<Recurso> itensAtuais, List<Recurso> recursos)
 }
 
 class Projeto {
-    - static int contadorId
     - int id
     - String nome
     - double orcamento
     - List<Recurso> recursos
     + Projeto(String nome, double orcamento)
-    + setNome(String nome): void
-    + setOrcamento(double orcamento): void
-    + adicionarRecurso(Recurso recurso): void
-    + removerRecurso(int recursoId): void
-    + getId(): int
-    + getNome(): String
-    + getOrcamento(): double
-    + getRecursos(): List<Recurso>
-    + editarProjeto(String novoNome, double novoOrcamento): void
-    + buscarRecursoPorId(int recursoId): Recurso
-    + toString(): String
+    + Projeto()
+    + void salvar()
+    + void adicionarRecurso(Recurso recurso)
+    + void carregarRecursos()
+    + int getId()
+    + String getNome()
+    + double getOrcamento()
+    + void setOrcamento(double orcamento)
+    + void setNome(String nome)
+    + void setRecursos(List<Recurso> recursos)
+    + void setId(int id)
+    + void editarProjeto(String novoNome, double novoOrcamento)
+    + void removerRecurso(int idRecurso)
 }
 
 class Recurso {
-    - static int contadorId
     - int id
     - String nome
     - double custo
     - double valorAgregado
     + Recurso(String nome, double custo, double valorAgregado)
-    + getId(): int
-    + getNome(): String
-    + getCusto(): double
-    + getValorAgregado(): double
-    + editarRecurso(String novoNome, double novoCusto, double novoValorAgregado): void
-    + setNome(String nome): void
-    + setCusto(double custo): void
-    + setValorAgregado(double valorAgregado): void
-    + toString(): String
+    + Recurso(int id, String nome, double custo, double valorAgregado)
+    + Recurso()
+    + int getId()
+    + String getNome()
+    + double getCusto()
+    + double getValorAgregado()
+    + void editarRecurso(String novoNome, double novoCusto, double novoValor)
+    + void setNome(String nome)
+    + void setCusto(double custo)
+    + void setValorAgregado(double valorAgregado)
+    + void setId(int id)
 }
 
-class MochilaAlgoritmoEstrela {
-    + MochilaAlgoritmoEstrela()
-    + otimizarRecursos(List<Recurso> recursos, double limiteCusto): List<Recurso>
-    - resolverAEstrela(List<Recurso> recursos, double limiteCusto): List<Recurso>
-    - calcularValorMaximoEstimado(List<Recurso> itensAtuais, List<Recurso> recursos): double
+class GerenciadorDeProjetos {
+    - Connection conn
+    + GerenciadorDeProjetos()
+    + void adicionarProjeto(Projeto projeto) throws SQLException
+    + void editarProjeto(Projeto projeto) throws SQLException
+    + void removerProjeto(int idProjeto) throws SQLException
+    + void adicionarRecurso(Recurso recurso, int idProjeto) throws SQLException
+    + void editarRecurso(Recurso recurso) throws SQLException
+    + void removerRecurso(int idRecurso) throws SQLException
+    + List<Projeto> listarProjetos() throws SQLException
+    + List<Recurso> listarRecursos(int idProjeto) throws SQLException
 }
 
-class MochilaAlgoritmoEstrela$Estado {
-    - List<Recurso> itens
-    - double custoAcumulado
-    - double valorAcumulado
-    - double valorEstimado
-    + MochilaAlgoritmoEstrela$Estado(List<Recurso> itens, double custo, double valor, double estimado)
-    + getItens(): List<Recurso>
-    + getCustoAcumulado(): double
-    + getValorAcumulado(): double
-    + getValorEstimado(): double
+class ConexaoBanco {
+    - static Connection conexao
+    + static Connection conectar()
+    + static void desconectar()
 }
 
-Main --> Projeto
-Projeto "1" --> "*" Recurso
-MochilaAlgoritmoEstrela --> Recurso
-MochilaAlgoritmoEstrela "1" *--> "*" MochilaAlgoritmoEstrela$Estado
+InterfaceGerenciadorDeProjetos --> GerenciadorDeProjetos : usa
+GerenciadorDeProjetos o-- Projeto : gerencia
+GerenciadorDeProjetos o-- Recurso : gerencia
+Projeto *-- Recurso : contém
 
 @enduml

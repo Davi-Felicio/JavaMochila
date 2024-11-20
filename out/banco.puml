@@ -1,0 +1,20 @@
+@startuml
+
+entity "Projeto" as projeto {
+    + id: int <<PK>>
+    + nome: string
+    + orcamento: double
+}
+
+entity "Recurso" as recurso {
+    + id: int <<PK>>
+    + nome: string
+    + custo: double
+    + valorAgregado: double
+    + projeto_id: int <<FK>>
+}
+
+' Definindo os relacionamentos
+projeto ||--o{ recurso : "possui"
+
+@enduml
