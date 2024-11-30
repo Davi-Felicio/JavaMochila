@@ -1,0 +1,9 @@
+Kauan Cristian de Souza,
+Davi Felicio,
+Victor Menezes.
+
+
+atribuições: 
+Kauan:(principal responsavel, (como nosso grupo só tem 3 pessoas as atribuições ficaram um caos entre as matérias))
+Victor: (revisão e suporte: Encontrou varios problemas que estavam travando o progresso do projeto)
+Davi: (Testes e revisão para encontrar possiveis falhas)
